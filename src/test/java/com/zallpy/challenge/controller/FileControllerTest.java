@@ -8,8 +8,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import com.zallpy.challenge.util.Constants;
-
 /**
  * @author Chesley Braga
  */
@@ -57,10 +55,10 @@ public class FileControllerTest {
 	Path fileName = Mockito.mock(Path.class);
 	Mockito.when(fileName.toString()).thenReturn("fileName.bat");
 
-	Path actual = controller.buildOutputFullFileName(fileName);
+	String actual = controller.buildOutputFileName(fileName);
 	Assert.assertTrue(actual != null);
 
-	String expected = Constants.PATH_OUTPUT.resolve("fileName.done.bat").toString();
+	String expected = "fileName.done.bat";
 	Assert.assertEquals(expected, actual.toString());
     }
 
@@ -69,10 +67,10 @@ public class FileControllerTest {
 	Path fileName = Mockito.mock(Path.class);
 	Mockito.when(fileName.toString()).thenReturn("fileName");
 
-	Path actual = controller.buildOutputFullFileName(fileName);
+	String actual = controller.buildOutputFileName(fileName);
 	Assert.assertTrue(actual != null);
 
-	String expected = Constants.PATH_OUTPUT.resolve("fileName.done").toString();
+	String expected = "fileName.done";
 	Assert.assertEquals(expected, actual.toString());
     }
 }

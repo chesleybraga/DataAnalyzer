@@ -16,13 +16,18 @@ public class Initiator {
     }
 
     public static void initiate() throws Exception {
-	FileController controller = new FileController();
 	Path inputPath = Constants.PATH_INPUT;
 
-	// processa os arquivos que já estão em uma pasta e suas subpastas
-	controller.processDirectory(inputPath);
+	if (inputPath.toFile().exists()) {
+	    FileController controller = new FileController();
 
-	// monitora uma pasta e processa os arquivos ao serem adicionados
-	controller.watchDirectory(inputPath, StandardWatchEventKinds.ENTRY_CREATE);
+	    // processa os arquivos que já estão em uma pasta e suas subpastas
+	    controller.processDirectory(inputPath);
+
+	    // monitora uma pasta e processa os arquivos ao serem adicionados
+	    controller.watchDirectory(inputPath, StandardWatchEventKinds.ENTRY_CREATE);
+	} else {
+	    System.err.println("O diretorio padrao '" + inputPath + "' não existe, crie-o e tente denovo");
+	}
     }
 }

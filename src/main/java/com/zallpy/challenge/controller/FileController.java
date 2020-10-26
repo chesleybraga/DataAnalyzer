@@ -110,8 +110,8 @@ public class FileController {
     private void processFile(Path fullFileName) throws IOException {
 	Collection<?> vos = processInputFile(fullFileName);
 
-	Path fullFileNameOutput = buildOutputFullFileName(fullFileName.getFileName());
-	processOutputFile(vos, fullFileNameOutput);
+	String fileNameOutput = buildOutputFileName(fullFileName.getFileName());
+	processOutputFile(vos, fileNameOutput);
     }
 
     /**
@@ -152,7 +152,7 @@ public class FileController {
      * @param fileNameInput nome do arquivo de entrada
      * @return nome do arquivo de saida
      */
-    protected Path buildOutputFullFileName(Path fileNameInput) {
+    protected String buildOutputFileName(Path fileNameInput) {
 	String fileNameOutput = null;
 	String fileName = fileNameInput.toString();
 
@@ -163,7 +163,7 @@ public class FileController {
 	    fileNameOutput = fileName + Constants.EXTENSION_OUTPUT_PREFIX;
 	}
 
-	return Constants.PATH_OUTPUT.resolve(fileNameOutput);
+	return fileNameOutput;
     }
 
     /**
@@ -176,7 +176,7 @@ public class FileController {
      * @throws IOException Caso ocorra algum erro ao criar ou escrever o arquivo de
      *                     saida
      */
-    private void processOutputFile(Collection<?> vos, Path fullFileName) throws IOException {
+    private void processOutputFile(Collection<?> vos, String fileName) throws IOException {
 	Collection<Client> clientes = new ArrayList<>();
 	Collection<Salesman> vendedores = new ArrayList<>();
 	ArrayList<Sale> vendas = new ArrayList<>();
@@ -190,6 +190,11 @@ public class FileController {
 		vendas.add((Sale) eachVO);
 	    }
 	}
+
+	if (!Constants.PATH_OUTPUT.toFile().exists()) {
+	    Constants.PATH_OUTPUT.toFile().mkdir();
+	}
+	Path fullFileName = Constants.PATH_OUTPUT.resolve(fileName);
 
 	try (PrintWriter writer = new PrintWriter(fullFileName.toFile())) {
 	    writer.println("Quantidade de Clientes: " + clientes.size());
